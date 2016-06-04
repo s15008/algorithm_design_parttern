@@ -5,29 +5,94 @@ public class TestBitCount {
     private static int LOOP_COUNT = 1_000_000;
 
     public static void main(String... args) {
-        long start, end;
-        //*
-        // ver.1
-        out.print("ver.1");
+        long start;
+        long end;
+
+        //* mineA
+        out.print("mineA");
         start = System.currentTimeMillis();
         for (int i = 0; i < LOOP_COUNT; i++) {
             for (int j = 0; j < 256; j++) {
                 int data = rand.NextInt(256);
-                countOne(data);
+                bitCount_mineA(data);
             }
         }
         end = System.currentTimeMillis();
         out.printf("経過時間: %.4f\n", (double)(end - start) / 1000);
         //*/
 
-        //*
-        // ver.2
-        out.print("ver.2");
+        //* mineB
+        out.print("mineB");
         start = System.currentTimeMillis();
         for (int i = 0; i < LOOP_COUNT; i++) {
             for (int j = 0; j < 256; j++) {
                 int data = rand.NextInt(256);
-                countOne_2nd(data);
+                bitCount_mineB(data);
+            }
+        }
+        end = System.currentTimeMillis();
+        out.printf("経過時間: %.4f\n", (double)(end - start) / 1000);
+        //*
+ 
+        //* A
+        out.print("A");
+        start = System.currentTimeMillis();
+        for (int i = 0; i < LOOP_COUNT; i++) {
+            for (int j = 0; j < 256; j++) {
+                int data = rand.NextInt(256);
+                bitCount_A(data);
+            }
+        }
+        end = System.currentTimeMillis();
+        out.printf("経過時間: %.4f\n", (double)(end - start) / 1000);
+        //*/ 
+
+        //* B
+        out.print("B");
+        start = System.currentTimeMillis();
+        for (int i = 0; i < LOOP_COUNT; i++) {
+            for (int j = 0; j < 256; j++) {
+                int data = rand.NextInt(256);
+                bitCount_B(data);
+            }
+        }
+        end = System.currentTimeMillis();
+        out.printf("経過時間: %.4f\n", (double)(end - start) / 1000);
+        //*/ 
+
+        //* C
+        out.print("C");
+        start = System.currentTimeMillis();
+        for (int i = 0; i < LOOP_COUNT; i++) {
+            for (int j = 0; j < 256; j++) {
+                int data = rand.NextInt(256);
+                bitCount_C(data);
+            }
+        }
+        end = System.currentTimeMillis();
+        out.printf("経過時間: %.4f\n", (double)(end - start) / 1000);
+        //*/ 
+
+        //* D
+        out.print("D");
+        start = System.currentTimeMillis();
+        for (int i = 0; i < LOOP_COUNT; i++) {
+            for (int j = 0; j < 256; j++) {
+                int data = rand.NextInt(256);
+                bitCount_D(data);
+            }
+        }
+        end = System.currentTimeMillis();
+        out.printf("経過時間: %.4f\n", (double)(end - start) / 1000);
+        //*/
+
+        //* E
+        out.print("E");
+        start = System.currentTimeMillis();
+        for (int i = 0; i < LOOP_COUNT; i++) {
+            for (int j = 0; j < 256; j++) {
+                int data = rand.NextInt(256);
+                bitCount_E(data);
             }
         }
         end = System.currentTimeMillis();
@@ -35,10 +100,10 @@ public class TestBitCount {
         //*/
     }
 
-    // ver.1
+    // ver.A
     // forで文字列回して要素単位で判別
-    // おっそいやつ
-    private static int countOne(int data) {
+    // ベンチウォーマー
+    private static int bitCount_mineA(int data) {
         int count = 0;
 
         String sData = Integer.toBinaryString(data);
@@ -49,10 +114,10 @@ public class TestBitCount {
         return count;
     }
 
-    // ver.2
+    // ver.B
     // シフト演算で削っていって1ケタ目が1かどうかを判定
-    // 多少はっやい
-    private static int countOne_2nd(int data) {
+    // スタメン
+    private static int bitCount_mineB(int data) {
         int count = 0;
 
         while (data != 0x0) {
@@ -62,9 +127,74 @@ public class TestBitCount {
 
         return count;
     }
+
+    /// 参考書のサンプル
+    // A 2で割った余りを集計する
+    private static int bitCount_A(int data) {
+        int count = 0;
+
+        while (data != 0) {
+            count += data % 2;
+            data /= 2;
+        }
+
+        return count;
+    }
+
+    // B 1とAND演算した結果を集計する
+    private static int bitCount_B(int data) {
+        int count = 0;
+
+        while (data != 0) {
+            count += data & 1;
+            data = data >>> 1;
+        }
+
+        return count;
+    }
+
+    // C 1を引いた値とAND演算した回数を求める
+    private static int bitCount_C(int data) {
+        int count = 0;
+
+        while (data != 0) {
+            data &= (data - 1);
+            count++;
+        }
+
+        return count;
+    }
+
+    // D ループを使わずに1の個数を数える
+    private static int bitCount_D(int data) {
+        data = data - ((data >>> 1) & 0x55555555);
+        data = (data & 0x33333333) + ((data >>> 2) & 0x33333333);
+        data = (data + (data >>> 4)) & 0x0f0f0f0f;
+        data = data + (data >>> 8);
+        data = data + (data >>> 16);
+
+        return data & 0x3f;
+    }
+
+    // E 最も効率的なアルゴリズムは
+    private static int memoCount[] = new int[256];
+    private static int bitCount_E(int data) {
+        int i = 0;
+
+        if (memoCount[1] == 0) {
+            for (i = 0; i < 256; i++) {
+                memoCount[i] = memoCount[i >> 1] + (i & 1);
+            }
+        }
+
+        return memoCount[data];
+    }
 }
 
-
+/*
+ * Sfmtクラス
+ * 擬似乱数生成器
+ */
 class Sfmt
 {
     int index;
@@ -129,4 +259,3 @@ class Sfmt
         return(y*2097152.0+z)*(1.0/9007199254740992.0);
     }
 }
-
