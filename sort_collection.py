@@ -37,14 +37,13 @@ def quick_sortEx( data):
     適当な基準値を決めて、配列の要素を基準値より大きいグループと小さいグループに分割することを繰り返す
     配列の1番目と2番目を比較して大きい方を選択する方法
     '''
-    if len( data) < 1:
+    if len( data) < 2:
         return data
 
-    pivot = data[ 0]
-
     # 配列の1番目と2番目を比較して大きい方を選択する
-    if len( data) > 2:
-        pivot = data[ 0] if data[ 0] < data[ 1] else data[ 1]
+    pivot = data[ 0]
+    if len( data) > 3:
+        pivot = data[ 0] if data[ 0] > data[ 1] else data[ 1]
 
     left = []
     right = []
@@ -59,7 +58,7 @@ def quick_sortEx( data):
 
     return left + [pivot] + right
 
-def quick_sortEx2( data):
+def quick_sortEx2( data, count = 0):
     '''
     適当な基準値を決めて、配列の要素を基準値より大きいグループと小さいグループに分割することを繰り返す
     配列から3点比較して中間値を選択する方法
@@ -83,8 +82,8 @@ def quick_sortEx2( data):
         else:
             right.append( data[ x])
 
-    left = quick_sortEx2( left)
-    right = quick_sortEx2( right)
+    left = quick_sortEx2( left, 0)
+    right = quick_sortEx2( right, 0)
 
     return left + [pivot] + right
 
@@ -92,13 +91,20 @@ if __name__ == '__main__':
     import time
     import sys
 
+    LIST_COUNT = 50
+    data = data_generate()
+    print( 'SOURCE:\n', data)
+    print( 'SORTED:\n', quick_sortEx( data))
+    print( 'ANSWER:\n', sorted( data))
+
+    '''
     # quick_sort TEST
     start = time.time()
 
     for _ in range( LOOP_COUNT):
         data = data_generate()
         quick_sort( data)
-        print( '.', end='') if (_+1) % ( LOOP_COUNT // 10) != 0 else print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
+        if (_+1) % ( LOOP_COUNT // 10) == 0: print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
         sys.stdout.flush()
 
     end = time.time()
@@ -111,22 +117,25 @@ if __name__ == '__main__':
     for _ in range( LOOP_COUNT):
         data = data_generate()
         quick_sortEx( data)
-        print( '.', end='') if ( _+1) % ( LOOP_COUNT // 10) != 0 else print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
+        if ( _+1) % ( LOOP_COUNT // 10) == 0: print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
         sys.stdout.flush()
 
     end = time.time()
     print( 'quick_sortEx 経過時間:', ( end - start))
     print( '             平均時間:', ( end - start) / LOOP_COUNT)
 
+    '''
+    '''
     # quick_sortEx2 TEST
     start = time.time()
 
     for _ in range( LOOP_COUNT):
         data = data_generate()
         quick_sortEx2( data)
-        print( '.', end='') if ( _+1) % ( LOOP_COUNT // 10) != 0 else print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
+        if ( _+1) % ( LOOP_COUNT // 10) == 0: print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
         sys.stdout.flush()
 
     end = time.time()
     print( 'quick_sortEx2 経過時間:', ( end - start))
     print( '              平均時間:', ( end - start) / LOOP_COUNT)
+    '''

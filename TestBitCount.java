@@ -5,6 +5,7 @@ public class TestBitCount {
     private static int LOOP_COUNT = 1_000_000;
 
     public static void main(String... args) {
+<<<<<<< HEAD
         long start;
         long end;
 
@@ -75,24 +76,44 @@ public class TestBitCount {
 
         //* D
         out.print("D");
+=======
+        long start, end;
+        //*
+        // ver.1
+        out.print("ver.1");
+>>>>>>> origin/master
         start = System.currentTimeMillis();
         for (int i = 0; i < LOOP_COUNT; i++) {
             for (int j = 0; j < 256; j++) {
                 int data = rand.NextInt(256);
+<<<<<<< HEAD
                 bitCount_D(data);
+=======
+                countOne(data);
+>>>>>>> origin/master
             }
         }
         end = System.currentTimeMillis();
         out.printf("経過時間: %.4f\n", (double)(end - start) / 1000);
         //*/
 
+<<<<<<< HEAD
         //* E
         out.print("E");
+=======
+        //*
+        // ver.2
+        out.print("ver.2");
+>>>>>>> origin/master
         start = System.currentTimeMillis();
         for (int i = 0; i < LOOP_COUNT; i++) {
             for (int j = 0; j < 256; j++) {
                 int data = rand.NextInt(256);
+<<<<<<< HEAD
                 bitCount_E(data);
+=======
+                countOne_2nd(data);
+>>>>>>> origin/master
             }
         }
         end = System.currentTimeMillis();
@@ -100,10 +121,17 @@ public class TestBitCount {
         //*/
     }
 
+<<<<<<< HEAD
     // ver.A
     // forで文字列回して要素単位で判別
     // ベンチウォーマー
     private static int bitCount_mineA(int data) {
+=======
+    // ver.1
+    // forで文字列回して要素単位で判別
+    // おっそいやつ
+    private static int countOne(int data) {
+>>>>>>> origin/master
         int count = 0;
 
         String sData = Integer.toBinaryString(data);
@@ -114,10 +142,17 @@ public class TestBitCount {
         return count;
     }
 
+<<<<<<< HEAD
     // ver.B
     // シフト演算で削っていって1ケタ目が1かどうかを判定
     // スタメン
     private static int bitCount_mineB(int data) {
+=======
+    // ver.2
+    // シフト演算で削っていって1ケタ目が1かどうかを判定
+    // 多少はっやい
+    private static int countOne_2nd(int data) {
+>>>>>>> origin/master
         int count = 0;
 
         while (data != 0x0) {
@@ -127,6 +162,7 @@ public class TestBitCount {
 
         return count;
     }
+<<<<<<< HEAD
 
     /// 参考書のサンプル
     // A 2で割った余りを集計する
@@ -195,6 +231,11 @@ public class TestBitCount {
  * Sfmtクラス
  * 擬似乱数生成器
  */
+=======
+}
+
+
+>>>>>>> origin/master
 class Sfmt
 {
     int index;
@@ -259,3 +300,7 @@ class Sfmt
         return(y*2097152.0+z)*(1.0/9007199254740992.0);
     }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
