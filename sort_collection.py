@@ -15,7 +15,7 @@ def quick_sort( data):
     ベーシックな方法
     くそなことに、今のところ一番はやい
     '''
-    if len( data) < 1:
+    if len( data) < 2:
         return data
 
     pivot = data[ 0]
@@ -32,110 +32,67 @@ def quick_sort( data):
 
     return left + [pivot] + right
 
-def quick_sortEx( data):
-    '''
+def quick_sortEx(data):
+    '''ぼくがかんがえてないさいきょうのくいっくそーと改
     適当な基準値を決めて、配列の要素を基準値より大きいグループと小さいグループに分割することを繰り返す
-    配列の1番目と2番目を比較して大きい方を選択する方法
+    配列をシーケンシャル走査して1番目より大きい数があったらそれを基準値にする方法
+    配列が同じ値しかなかったらそのままリターンする
     '''
-    if len( data) < 2:
+    if len(data) < 2:
         return data
 
     # 配列の1番目と2番目を比較して大きい方を選択する
-    pivot = data[ 0]
-    if len( data) > 3:
-        pivot = data[ 0] if data[ 0] > data[ 1] else data[ 1]
-
-    left = []
-    right = []
-    for x in range( 1, len( data)):
-        if data[ x] <= pivot:
-            left.append( data[ x])
-        else:
-            right.append( data[ x])
-
-    left = quick_sortEx( left)
-    right = quick_sortEx( right)
-
-    return left + [pivot] + right
-
-def quick_sortEx2( data, count = 0):
-    '''
-    適当な基準値を決めて、配列の要素を基準値より大きいグループと小さいグループに分割することを繰り返す
-    配列から3点比較して中間値を選択する方法
-    '''
-    if len( data) < 1:
+    length = len(data)
+    pivot = data[0]
+    i = 0
+    same = 0
+    while i < length:
+        if pivot < data[i]:
+            pivot = data[i]
+            break
+        if pivot == data[i]:
+            same += 1
+        i += 1
+    if same == length:
         return data
 
-    pivot = data[ 0]
-
-    # 配列から3点比較して中間値を選択する
-    if len( data) > 3:
-        pivot = data[ 2] if pivot > data[ 2] else pivot
-        pivot = data[ 0] if pivot < data[ 0] else pivot
-
-
     left = []
     right = []
-    for x in range( 1, len( data)):
-        if data[ x] <= pivot:
-            left.append( data[ x])
+    for x in range(0, length):
+        if data[x] < pivot:
+            left.append(data[x])
         else:
-            right.append( data[ x])
+            right.append(data[x])
 
-    left = quick_sortEx2( left, 0)
-    right = quick_sortEx2( right, 0)
+    left = quick_sortEx(left)
+    right = quick_sortEx(right)
 
-    return left + [pivot] + right
+    return left + right
+
+def check_speed(func, amount, msg):
+    ''' ファンクション処理時間測定関数
+    ファンクションを複数回処理した経過時間と平均時間を出力する
+    Args:
+        func (function): 対象の関数
+        amount (int): 施行回数
+        msg (str): 表示メッセージ
+    Reterns:
+        str: 経過時間と平均時間を表すフォーマットされた文字列
+    '''
+    start = time.time()
+    for _ in range(amount):
+        data = data_generate()
+        func(data)
+
+    end = time.time()
+
+    return '{}\n経過時間:{}\n平均時間:{}\n'.format(msg, (end - start), (end - start) / amount)
 
 if __name__ == '__main__':
     import time
     import sys
 
-    LIST_COUNT = 50
-    data = data_generate()
-    print( 'SOURCE:\n', data)
-    print( 'SORTED:\n', quick_sortEx( data))
-    print( 'ANSWER:\n', sorted( data))
+    MAX_NUM = 100
+    print(check_speed(quick_sort, LOOP_COUNT, 'quick_sort'))
+    print(check_speed(quick_sortEx, LOOP_COUNT, 'quick_sortEx(ぼくの)'))
 
-    '''
-    # quick_sort TEST
-    start = time.time()
-
-    for _ in range( LOOP_COUNT):
-        data = data_generate()
-        quick_sort( data)
-        if (_+1) % ( LOOP_COUNT // 10) == 0: print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
-        sys.stdout.flush()
-
-    end = time.time()
-    print( 'quick_sort 経過時間:', ( end - start))
-    print( '           平均時間:', ( end - start) / LOOP_COUNT)
-
-    # quick_sortEx TEST
-    start = time.time()
-
-    for _ in range( LOOP_COUNT):
-        data = data_generate()
-        quick_sortEx( data)
-        if ( _+1) % ( LOOP_COUNT // 10) == 0: print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
-        sys.stdout.flush()
-
-    end = time.time()
-    print( 'quick_sortEx 経過時間:', ( end - start))
-    print( '             平均時間:', ( end - start) / LOOP_COUNT)
-
-    '''
-    '''
-    # quick_sortEx2 TEST
-    start = time.time()
-
-    for _ in range( LOOP_COUNT):
-        data = data_generate()
-        quick_sortEx2( data)
-        if ( _+1) % ( LOOP_COUNT // 10) == 0: print( str(_ // ( LOOP_COUNT // 10) + 1) + "0%" )
-        sys.stdout.flush()
-
-    end = time.time()
-    print( 'quick_sortEx2 経過時間:', ( end - start))
-    print( '              平均時間:', ( end - start) / LOOP_COUNT)
-    '''
